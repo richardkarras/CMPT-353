@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  frontend:
+    build: ./react
+    container_name: reactProject
+    ports: 
+      - '85:3000'
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\project\React:/usr/src/app'
+    working_dir: /usr/src/app/project/
+    depends_on:
+      mysql:
+        condition: service_started
+      backend:
+        condition: service_started
+    stdin_open: true
+    tty: true
+  backend:
+    build: ./node
+    container_name: nodeProject
+    ports:
+      - '8080:8080'
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Project\node:/usr/src/app'
+    working_dir: /usr/src/app
+    depends_on:
+      mysql:
+        condition: service_started
+    stdin_open: true
+    tty: true
+  mysql:
+    image: mysql:5.7
+    container_name: dbProject
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Project\mysql:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      

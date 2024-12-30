@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Read File on Change</title>
+  </head>
+  <body>
+    <p>File contents:</p>
+    <pre id="output"></pre>
+    <script>
+      var fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.style.display = "none";
+      document.body.appendChild(fileInput);
+
+      function readTextFile(file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById("output").textContent = event.target.result;
+        };
+        reader.readAsText(file);
+      }
+
+      setInterval(function() {
+        fetch("Server/Data/posts.txt")
+          .then(response => response.blob())
+          .then(blob => {
+            var lastModified = new Date(blob.lastModified).getTime();
+            if (lastModified > fileInput.lastModified) {
+              fileInput.lastModified = lastModified;
+              readTextFile(blob);
+            }
+          })
+          .catch(error => console.log(error));
+      }, 1000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Assignment 4</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script> 
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script> 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+    <div id="root"></div> 
+    <script type="module"> import React from 'react'; 
+                           import ReactDOM from 'react-dom'; 
+                           import App from './assn4-app/src/App'; 
+                           ReactDOM.render(<App />, 
+                           document.getElementById('root'));</script> 
+    <script type="text/javascript"> 
+      const form = document.querySelector("form");
+      form.addEventListener("submit", e => { e.preventDefault(); 
+      const formData = new FormData(form); 
+      const topic = formData.get("topic"); 
+      const data = formData.get("data");
+      fetch("/addPost", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic, data }) }) 
+      .then(response => response.json()) 
+      .then(result => console.log(result)) 
+      .catch(error => console.error(error)); }); </script>
+    <form action="/addPost" method="post">
+      <label for="Topic"> Topic:</label><br><br>
+      <input type="text" name="topic" value=""><br><br>
+      <br>
+      <label for="Data"> Data:</label><br><br>
+      <input type="text" name="data" value=""><br><br>
+      <br>
+      <input type="submit" value="Submit"><br><br>
+    </form>
+    <button onclick="/getPosts"> Read Posts </button>
+    <script>
+      ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  node:
+    build: .
+    #image: node:latest # added this line and by-passed the dockerfile
+    container_name: node3
+    ports: 
+      - '80:8080' # Added quotes around the port number
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 3\TA help\Richard2:/usr/src/app'
+    working_dir: /usr/src/app
+    depends_on:
+      mysql:
+        condition: service_started
+    stdin_open: true
+    tty: true
+    command: node "/usr/src/app/app.js"
+  mysql:
+    image: mysql:5.7
+    container_name: db3
+    ports:
+      - '3306:3306' # Added quotes around the port number
+    # expose:
+    #   - 3306 # Commented this part out
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 3\TA help\Richard2\mysql:/var/lib/mysql'
+    environment:
+      # MYSQL_DATABASE: postdb
+      # MYSQL_USER: admin
+      # MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: admin
+      

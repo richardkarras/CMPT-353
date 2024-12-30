@@ -1,0 +1,8 @@
+npx loadtest -n 10 -c 10 -m POST -T 'multipart/form-data' --data '{"Topic": "test", "Data": "test"}' http://localhost/posting:8080
+
+Loadtest package: npx
+looking at performance of post method, how do you pass information?
+docker attach node1
+
+docker exec -it node1 bash
+#npx loadtest -n 10 -c 1 -m POST -T 'application/x-www-form-urlencoded' --data '{"Topic": "test", "Data": "test"}' http://localhost:8080

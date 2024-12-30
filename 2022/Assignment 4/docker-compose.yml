@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  frontend:
+    build: ./react
+    container_name: react4
+    ports: 
+      - '84:3000'
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\React:/usr/src/app'
+      #- 'C:\Users\venom\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\React:/usr/src/app'
+    working_dir: /usr/src/app
+    depends_on:
+      mysql:
+        condition: service_started
+      backend:
+        condition: service_started
+    stdin_open: true
+    tty: true
+    #command: nodemon "/usr/src/app/app.js"
+  backend:
+    build: ./node
+    container_name: node4
+    ports: 
+      - '8080:8080'
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\node:/usr/src/app'
+      #- 'C:\Users\venom\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\node:/usr/src/app'
+    working_dir: /usr/src/app
+    depends_on:
+      mysql:
+        condition: service_started
+    #command: node "/usr/src/app/server.js"
+    stdin_open: true
+    tty: true
+  mysql:
+    image: mysql:5.7
+    container_name: db4
+    #ports:
+    #  - '3306:3306'
+    volumes:
+      - 'C:\Users\Richard\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\mysql:/var/lib/mysql'
+      #- 'C:\Users\venom\OneDrive - University of Saskatchewan\CMPT 353\Assignments\Assignment 4\mysql:/var/lib/mysql'
+    environment:
+      # MYSQL_DATABASE: postdb
+      # MYSQL_USER: admin
+      # MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: admin
+      

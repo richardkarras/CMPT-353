@@ -1,0 +1,9 @@
+#Richard Karras
+#rek236 10527391
+#CMPT 353
+
+FROM python:latest
+
+EXPOSE 8080
+
+CMD ["/bin/bash"]
