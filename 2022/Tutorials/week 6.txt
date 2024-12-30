@@ -1,0 +1,8 @@
+1.  Callbacks (JS chpt 29)
+2.  Promistes (JS Chpt 42)
+3.  Intervals and timeouts (JS chpt 30)
+4.  Recursion
+5.  Fetch
+6.  Middleware (NJS chpt 3)
+7.  Routing (NJS chpt 3)
+8.  MySQL (pp. 130 mysql notes for professionals)
