@@ -1,0 +1,23 @@
+Docker compose
+
+mysql1:
+{other mysql1 setup}
+Healthcheck:
+	test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
+	timeout: 20s
+	retries: 10
+node1:
+{other node1 setup}
+depends_on:
+	mysql1:
+		condition: service_healthy
+stdin_open: true
+tty: true
+
+#healthcheck for Node
+healthcheck:
+	test: "curl -f localhost:8080"
+	interval: 5s
+	timeout: 5s
+	retries: 20
+	

@@ -1,0 +1,2 @@
+display json file for question 1?
+fetch("data.json").then(response => response.json()).then(data => {document.getElementById("jsonOutput").innerHTML = JSON.stringify(data[1]); console.log(data)})

@@ -1,0 +1,33 @@
+Pg 21 mysql book - Select statements
+pg 17 mysql book - auto increment
+pg 41 " - Insert
+pg 53 " - Order by
+pg 55 " - Group by
+pg 62 " - SQL Joins
+pg 152 " - Transactions (samples)
+pg 135 " - Transactions
+
+
+REACT
+
+docker-compose up -d #nodejs with react app
+docker attach nodejs1
+
+-- started up nodejs and connected to react app (D2)
+
+-- npm start
+
+React is more declarative than imperative for programming
+
+Functions & Tags
+	-What do functions return? 
+		-A tag
+		Why?
+			-That is to be added into the DOM tree
+	-How to add styles?
+		-define per tag
+	-How to pass arguments to functions?
+		- <Post topic="" data""></Post> where "Post" is a REACT app.
+		Why?
+		
+		** import POST from "./Post"

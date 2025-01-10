@@ -1,0 +1,146 @@
+HTTP - Part 1
+
+Implements request/response
+
+Communication:
+1. Physical Layer
+2. Data Link Layer
+3. Network/Internet layer
+4. Transport layer
+5. Application layer
+
+IP v4
+Offset 4-bit 8-bit 16-bit 32-bit
+0	Ver.	Header length	Type of service	Total Length
+32	Identification				Flags | Offset
+64	TTL	Protocol		Header Checksum
+96 Source address
+128 Destination
+
+TCP & UDP
+-Transmission Control Protocol
+	-TCP
+	-Core Protocol
+	-Provide reliable, ordered communication
+	- Used as the basic protocol for many applications eg www
+	
+-User Datagram Protocol
+	-UDP
+	-Fast, compact, but no guarantees
+	-One way communication
+	-No guaranteed delivery
+	-Often used for VoIP, DNS, etc
+	
+TCP Connection
+-TCP is the most common protocol
+-Web runs on this mostly
+
+TCP/IP communication
+Every machine has to have a unique IP address
+
+Every machine has to use a port
+Some Ports have special meanings
+	-eg 80, 443
+	
+Domain Name System
+IP addresses are not sufficient
+	-hard to remember
+	-IP addresses of servers can change
+	
+Naming system for computers
+	-host file (old)
+	-using DNS servers (new)
+	
+How does DNS work?
+Each computer knows IP of at least one DNS server
+If your DNS server does not know the requested name it polls another DNS server
+
+HTTP Versions
+0.9 - supports only GET
+1.0 - 1996
+		- Request == create TCP connection
+1.1 - 1997
+		- "Keep-alive"
+			-Ability to reuse existing TCP connection
+			-Speedup due to costly creation of connection
+			-Pipelining
+				-sending multiple requests
+				-receive results in same ordered
+			-Problem infrastructure
+				-proxies couldn't handle
+				-not a successful feature
+				-removed by some browsers
+			-Problem head-of-line blocking
+				-slow request can block subsequent ones
+					-packet loss
+					-server needs more time
+			-Multiple active connections
+			-Ensure faster request/response
+2 - 2015
+		-"streams"
+			-Ability to reuse existing TCP connection
+			-speedup due to costly creation of connection
+		-Header compression
+		-Head-of-line blocking
+			-solved on application layer
+			-still issue on transport layer
+		-Push
+			-send updates to client
+			-send resources/response before request
+			-????????
+			-Index.htm -> need for css & javascript -> send it after index.html
+3 - 2022
+	-Idea from 2020, released in 2022
+	-QUIC -> UDP
+	-packet loss in one stream doesn't impact other streams
+	-Target
+		-mobile, data intensive interactions
+			-allows switching networks eg 5G, 3G, 4G
+	-connection ID
+		-enables connection across networks
+		-different network but use same ID
+	
+	
+Browser and server negotiate version
+
+HTTP Commands: https://en.wikipedia.org/wiki/HTTP
+HEAD
+	-Asks for the response identical to the one that would correspond to a GET request, but without the response body.  This is ufeful for retrieving meta-information written in response headers, without having to transport the entire content
+GET
+	-Requests a representation of the specified resource.  By far the most common method used on the Web today.  Should not be used for operations that cause side-effects (using it for actions in web applications is a common misuse).  See "save methods" below.
+POST
+	-Submits data to be processed (eg from an HTML form) to the identified resource.  The data is included in the body of the request.  This may result in the creation of a new resoure or the updates of existing resources or both.
+PUT
+	-Uploads a representation of the specified resource.
+DELETE
+	-Deletes the specified resource.
+TRACE
+	-Echoes back the received request, so that a client can see what intermediate servers are adding or changing in the request.
+OPTIONS
+	-Returns the HTTP methods that the server supports.  This can be used to check the functionality of a web server.
+CONNECT
+	-Converts the request connection
+	
+Idempotent and Safe
+-Idempotent -> don't change response
+-Safe -> can be cached
+
+
+Example:
+GET /echo HTTP/1.1
+Host: reqbin.com
+Accept: */*
+
+GET /echo HTTP/1.1
+Host: reqbin.com
+Accept: text/html
+
+GET /echo/get/json HTTP/1.1
+Host: reqbin.com
+Accept: application/json
+
+GET /tutorials/other/top-20-mysql-best-practices/ HTTP/1.1
+Host: code.tutsplus.com
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5)
+Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+

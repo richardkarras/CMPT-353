@@ -1,0 +1,4 @@
+mysql
+
+building docker compose with 2 machines instead of 1.
+

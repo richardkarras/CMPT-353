@@ -1,0 +1,23 @@
+Tables: 
+	Students -> Columns SID, Name
+	Courses -> CID, C_Name
+	Students_course_registration -> SID, CID
+
+SELECT a.Name, b.C_Name FROM 
+		STUDENTS a, 
+		COURSES b, 
+		ST_C_REG C
+	
+	WHERE
+		a.ID = c.SID
+	AND
+		b.CID = C.SID
+	AND
+		a.Name = "Vitalli";
+		
+Left outer join:
+Give everything in Table A (left), regardless of existance in Table B (right)
+Right outer join:
+Give everything in Table B (right), regardless of existance in Table A (left)
+Cartesian Join:
+Give everything from both tables regardless of status in each table.

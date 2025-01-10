@@ -1,0 +1,50 @@
+// Dockerfile
+
+FROM python:latest
+
+EXPOSE 5000
+
+WORKDIR /usr/src/app
+
+RUN pip install Flask
+
+CMD ["/bin/bash"]
+
+//End Dockerfile
+
+//Docker compose file docker-compose.yml
+
+version: "3.9"
+services:
+python1:
+	build: .
+	container_name: python_1
+	command: flask run --host=0.0.0.0
+	ports:
+		- "80:5000:"
+	volumes:
+		- /Users/ralph/classes/436/test/python:/usr/src/app
+	environment:
+		- FLASK_APP=hello
+		- FLASK_ENV=development
+		
+//End docker compose file
+
+Python / Flask
+
+from flask import Flask
+from flask import request, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+	return "<p> Hello World </p>"
+	
+@app.route ("/add", methods=['GET'])
+def add():
+	x = int(request.args['x'])
+	y = int (request.args['y']
+	z = x + y
+	return jsonify(z)
+	

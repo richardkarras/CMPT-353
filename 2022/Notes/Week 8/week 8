@@ -1,0 +1,13 @@
+1. back end/ server (nodejs)
+	a. created folder for back-end/
+	b. run npm init -y
+	c. install dependencies (express, body-parser, etc)
+	d. copy "data server" code from week 8 folder on canvas
+	e.  test the app
+	
+2.  front-end/client (react)
+	a. create a folder for the front-end
+	b. run: npx create-react-app "your-front-end-app-name"
+	c.  install dependencies (react-router-dom, etc)
+	d.  copy codes "app.js, showposts.js, showposts.css, addposts.js" etc
+	e. test the app

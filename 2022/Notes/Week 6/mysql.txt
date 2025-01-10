@@ -1,0 +1,105 @@
+Loadtest package: npx
+looking at performance of post method, how do you pass information?
+docker attach node1
+
+docker exec -it node1 bash
+#npx loadtest -n 10 -c 1 -m POST -T 'application/x-www-form-urlencoded' --data '{"filename": "test", "data": "test"}' http://localhost:8080/save
+
+
+>> Server3.js
+
+from Demo notes
+
+MySQL & Node (1)
+
+MYSQL package
+	-install npm mysql
+	-use it in code
+
+Place early in nodejs code
+____________________________________________________
+var mysql = require('mysql');
+
+var connection = mysql.createConnection(
+{
+	host		: "mysql1",
+	user		: 'root',
+	password	: 'admin'
+});
+
+connection.connect();
+____________________________________________________
+
+Add SQL Statements
+____________________________________________________
+connection.query('SELECT * FROM your_table', function(error, results, fields)
+{
+	if (error) throw error;
+	
+	console.log('The solution is: ', results);
+});
+____________________________________________________
+
+connection.query(`CREATE TABLE mytable ( id int unsigned NOT NULL auto_increment, username varchar(100) NOT NULL, email ***not finished copying from screen***
+
+
+____________________________________________________
+app.get('/connectPOSTS', (req,res) => {var name = req.body.fname; var email = name + "@gmail.com";
+
+var query = `INSERT INTO mytable (username, email) VALUES('${name}', '${email}`;
+
+connection.query(query, function (error,result) {
+console.log(error); });
+res.send('ok '); });
+____________________________________________________
+
+'use strict';
+
+//load package
+const express
+const bodyParser
+
+var mysql = require('mysql')
+
+var connection = mysql.createConnection
+app.get('/init', (req,res) => {
+
+	connection.query('CREATE DATABASE posts', function (error,result)
+		{ if (error) console.log(error);});
+		
+	connection.query('USE posts', function (error, results)
+	{if (error) console.log(error);});
+	
+	connection.query('CREATE TABLE mytable (id int unsigned NOT NULL auto_increment, username varchar(100) NOT NULL, email varchat(100) NOT NULL, PRIMARY KEY (id))', function (error, result) {});
+	
+	res.send('ok');
+	
+	app.get('/connectPOSTS', (req,res) => 
+	{
+		var name = req.body.fname;
+		var email = name + "@gmail.com";
+		
+		connection.querty('USE posts', function (error, results) {
+			if (error) console.log(error);
+			});
+			
+			res.send('ok ');});
+			
+	app.post('/greetiong', (req,res) =>
+	{
+		var name = req.body.fname;
+		var email = name + "@gmail.com";
+	var query = 'INSERT INTO mytable (username, email) VALUES ('${name}', '${email}')`;
+
+
+app.get('/init', (req,res) =>{
+	console.log("init");
+	console.query('CREATE DATABASE posts', function (error,result) {
+		if (error) consolelog(error);
+});
+
+app.post('/addPost', (req,res) => {
+	#log
+	var topic
+	var data
+	}	

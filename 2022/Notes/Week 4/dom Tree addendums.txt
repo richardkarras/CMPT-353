@@ -1,0 +1,7 @@
+JavaScript (JS)
+
+How to add JavaScript (code) in Page?
+	<script type = "text/javascript"> ... </script>
+How to call javascript
+	Script -> interpreter, starts executing
+	Script -> Function definitions & statements

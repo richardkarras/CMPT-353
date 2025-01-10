@@ -1,0 +1,62 @@
+Rest 2 / URL in Rest
+
+protocol://host:port/path/{args} instead of protocol:://host:port/path?args -> typo should have been protocol://host:port/path?args
+
+NoSQL 1
+
+Why
+-Massive increase in new data
+-Storage
+-Unstructured data
+-SQL
+	-B-Tree
+	-Support fast reads
+-NoSQL
+	-LSM - Log Structured Merge Tree
+	-Support fast writes
+	
+Storing Data in SQL(high-level)
+-Binary Tree
+	-O(n) -> space
+	-Search/Insert/Delete ?
+	-Balanced Tree (B-tree)
+		-O(n) -> space
+		-O(log(n)) for search/insert/delete
+-B-Tree of order M
+	-Rudolf Bayer, Edward M. McCreight
+	-Balanced Tree
+	-All nodes have at most M child nodes
+	-Every internal node has at least 2 child nodes
+	-All leaf nodes are on the same level
+	-Every non-leaf node with K children has K-1 trees
+-Nodes in a B-Tree
+	-Internal/Inner Nodes
+		-All nodes that are not root or leaf
+		-Root Nodes
+		-Leaf Nodes
+SQL -> Use of B-Trees
+	-Fast reads
+	-
+	-
+NoSQL -> LSM
+-Writes in LSM
+	-Write to memtable
+	-Ordered by key
+	-Balanced Binary Tree
+-If memtable is full -> write to disk as immutable sorted string table (SST)
+	-Key value pairs stored in sorted sequence
+	-Fast write -> sequential write
+	-Last SST is most recent segment of LSM tree
+Immutable SST???
+-Updates
+	-New entry added into new SST
+-Delete
+	-Add marker (tombstone)
+-Read
+	-check memtable
+	-Search SST starting with most recent SST
+		-SSTN -> SST1
+		-SST -> sorted -> fast reads
+Problem of SST growth
+	-Compacting and Merging
+	-Merging is simple (merging sorted items) => merge sort

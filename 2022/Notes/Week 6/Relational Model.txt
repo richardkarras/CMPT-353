@@ -1,0 +1,94 @@
+Relational Model
+
+Intro:
+History:
+-E.F. Codd
+	A relational model of data for large shared databanks (1970)
+-Set-Theory model (Childs, 1968)
+-Goals of the RM (relational model)
+	-high degree of data independence
+	-theory of basic problems e.g. consisency, redundancy (normalization)
+	-use of set-oriented data manipulation
+
+Terminology:
+Common Terminology		Relational Terminology
+Table					Relation
+Record or Row			Tuple
+Field or Column			Attribute
+Number of Columns		Degree
+Number of Rows			Cardinality
+Identifier				Primary Key
+Proof of legal values	Domain
+
+RM vs Relational DBMS
+	-There are differences between RM and relational DBMS
+		-RM no duplicate tuples
+		-Domains
+		-etc...
+		
+Domain
+	-pool of values (like a type)
+	-values are atomic
+	-domains have names
+		-unique in database
+		-are set of values
+		-different domains can overlap
+	-e.g. {white, red, blue, green}
+	
+Relation 1
+-Relations consist of heading and body
+-Heading
+	-fixed set of attributes
+		-e.g. {<A1:D1>,<A2,D2>,...,<AN:DN>}
+-Body
+	-set of tuples
+		-e.g. {T1, T2, TN}
+	-Tuple
+		-{<A1:V1>,<A2:V2>,...,<AN:VN>}
+Relation 2
+-Heading for relation S
+	-{bno, street, city, country}
+	-{
+		<bno : DOMAIN-BNO>
+		<street : DOMAIN-STREET>
+		<city : DOMAIN-CITY>
+		<country : DOMAIN-COUNTRY>
+	 }
+ Relation 3
+ -Tuple
+	-{b1, 110 Money Road, London, UK}
+	-{
+		<bno : 'b1'>
+		<street : '110 Money Road'>
+		<city : 'London'>
+		<country : 'UK'>
+	 }
+	 
+ Relation 4
+ We interpret as humans the relation
+ Difference between relation and table
+	-relation -> abstract
+	-relation -> linked to set theory
+	-table -> concrete thing
+	-table -> allows duplicate tuples
+Relation 5
+-Table -> suggest order
+	>> tupel
+	>> attributes
+But! there is no order of tuples or atributes!
+Relation 6
+
+Operations:
+Relation -> Relation
+Operations
+	-selection
+	-projection
+	-cartesian product
+	-union
+	-intersection
+	-differences
+	-join(s)
+	-division
+	
+	
+Joins need more reading - find in the mysql book
