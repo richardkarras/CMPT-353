@@ -1,0 +1,12 @@
+services:
+  python-app:
+    image: my/python
+    build: .
+    container_name: python1
+    ports: 
+      - 8080:8080
+    volumes: 
+      - /home/richard/Documents/CMPT 353/2025/Assignment1/python:/usr/src/app
+    command: "/bin/bash"
+    stdin_open: true
+    tty: true

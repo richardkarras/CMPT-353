@@ -1,0 +1,10 @@
+services:
+  node1:
+    build: .
+    container_name: n1
+    ports:
+      -80:8080
+    volumes:
+      - "/home/richard/Documents/CMPT 353/2025/Week 1":/usr/src/app
+    stdin_open: true
+    tty: true
