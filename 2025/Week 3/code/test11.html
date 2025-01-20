@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+
+<html>
+   <head> 
+      <title>Demo 1</title>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+
+
+      <script type = "text/javascript">
+
+
+	function ChangeText()
+	{
+		$('p').html("hello ralph");
+	}
+
+	function ChangeColor()
+	{
+		var tag = document.getElementById("p1");
+
+		tag.style.color = "blue";
+	}
+
+ 
+      </script>
+
+   </head>
+   <body>
+
+	<p id="p1">Hello world!</p>
+	<p id="p2">Hello world!</p>
+
+	<button onclick="ChangeText()"> Change text </button>
+	<button onclick="ChangeColor()"> Change color </button>
+
+   
+
+
+   </body>
+</html>
