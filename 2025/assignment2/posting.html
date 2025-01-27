@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Topic & Data </title>
+    
+  </head>
+  
+  <body>
+    
+    <form id="posting">
+      <label for="topic"> Topic:</label><br><br>
+      <input type="text" name="topic" id="topic" value=""><br><br>
+      <br>
+      <label for="data"> Data:</label><br><br>
+      <input type="text" name="data" id="data" value=""><br><br>
+      <br>
+      <button type="submit">Submit</button><br><br>
+    </form>
+
+    <script type = "text/javascript">
+      function readPosts() {
+        fetch("/readPosts")
+          .then((response) => response.text())
+          .then((data) => {
+            // Split the data into individual entries based on the separator (assuming newline or specific delimiter)
+            const entries = data.split(/\r?\n/).filter(entry => entry.trim() !== "").map((entry) => {
+              // Ensure consistent format for parsing by trimming and adding missing braces
+              if (!entry.startsWith("{")) entry = "{" + entry;
+              if (!entry.endsWith("}")) entry = entry + "}";
+              return entry;
+            });
+
+        // Parse and format each entry
+        const formattedPosts = entries
+          .map((entry) => {
+            const topicMatch = entry.match(/Topic:\s*(.+?)\s*Data:/);
+            const dataMatch = entry.match(/Data:\s*(.+?)\s*Timestamp/);
+            const timestampMatch = entry.match(/Timestamp\(UTC-0\):\s*(.+)/);
+
+            const topic = topicMatch ? topicMatch[1].trim() : "Unknown Topic";
+            const dataContent = dataMatch ? dataMatch[1].trim() : "No Data";
+            const timestamp = timestampMatch ? timestampMatch[1].trim() : "No Timestamp";
+
+            return `<div>
+                      <strong>Topic:</strong> ${topic}<br>
+                      <strong>Data:</strong> ${dataContent}<br>
+                      <strong>Timestamp:</strong> ${timestamp}
+                    </div>`;
+          })
+          .join("<hr>"); // Add a horizontal line between posts
+
+        // Display the formatted posts in the "posts" container
+        document.getElementById("posts").innerHTML = formattedPosts;
+        })
+        .catch((error) => console.error("Error fetching posts:", error));
+      }
+
+      document.getElementById("posting").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const topic = document.getElementById('topic').value;
+        const data = document.getElementById('data').value;
+
+        try{
+          
+          const response = await fetch('/postmessage', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ topic, data })
+          });
+          
+          if (!response.ok){
+            throw new Error(`HTTP Error! status ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log(`Server Response: ${result.message}`);
+          readPosts();
+
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      });
+    </script>  
+    <div id="posts">
+      <script>
+        readPosts();
+      </script>
+      </div>
+    
+    
+    
+  </body>
+</html>
