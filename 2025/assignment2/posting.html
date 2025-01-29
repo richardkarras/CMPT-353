@@ -35,7 +35,7 @@
           .map((entry) => {
             const topicMatch = entry.match(/Topic:\s*(.+?)\s*Data:/);
             const dataMatch = entry.match(/Data:\s*(.+?)\s*Timestamp/);
-            const timestampMatch = entry.match(/Timestamp\(UTC-0\):\s*(.+)/);
+            const timestampMatch = entry.match(/Timestamp\s*(.+?)\s*(?=\})/);
 
             const topic = topicMatch ? topicMatch[1].trim() : "Unknown Topic";
             const dataContent = dataMatch ? dataMatch[1].trim() : "No Data";

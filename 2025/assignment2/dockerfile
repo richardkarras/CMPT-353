@@ -8,6 +8,5 @@ COPY ./package.json /Server
 
 RUN npm install body-parser
 RUN npm install express
-RUN npm install -g loadtest
 
 CMD ["\bin\bash"]
