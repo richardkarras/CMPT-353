@@ -4,12 +4,12 @@ services:
     build: .
     container_name: node1
     ports:
-    - 80:8080
+    - 3000:8080
     volumes:
     - D:/CMPT-353/2025/Assignment2:/Server #Enforcer
     - D:/CMPT-353/2025/Assignment2/Data:/Data #Enforcer
     #- "C:/Users/Richard/OneDrive - University of Saskatchewan/CMPT 353/Assignments/Assignment 2:/Server" #desktop
     #- "C:/Users/Richard/OneDrive - University of Saskatchewan/CMPT 353/Assignments/Assignment 2:/Data" #desktop
-    command: "/bin/bash"
+    command: "node server"
     stdin_open: true
     tty: true
