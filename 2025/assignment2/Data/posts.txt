@@ -15,3 +15,12 @@
 { Topic: Other posts Data: where are they? Timestamp(UTC-0): 2025-1-27 1:26:14 YYYY-MM-DD hh:mm:ss }
 { Topic: New test Data: Now with formatting Timestamp(UTC-0): 2025-1-27 1:38:45 YYYY-MM-DD hh:mm:ss }
 { Topic: About time Data: Finally done Timestamp(UTC-0): 2025-1-27 1:40:20 YYYY-MM-DD hh:mm:ss }
+{ Topic: {} Data: }{ Timestamp(UTC-0): 2025-1-29 0:47:41 YYYY-MM-DD hh:mm:ss }
+{ Topic: {} Data: }{ Timestamp(UTC-0): 2025-1-29 0:47:43 YYYY-MM-DD hh:mm:ss }
+{ Topic:  Data: Empty Topic Timestamp(UTC-0): 2025-1-29 0:47:57 YYYY-MM-DD hh:mm:ss }
+{ Topic: Empty Data Data:  Timestamp(UTC-0): 2025-1-29 0:48:7 YYYY-MM-DD hh:mm:ss }
+{ Topic:  Data:  Timestamp(UTC-0): 2025-1-29 0:48:15 YYYY-MM-DD hh:mm:ss }
+{ Topic: `~1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}\|aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/? Data: `~1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}\|aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/? Timestamp(UTC-0): 2025-1-29 0:49:49 YYYY-MM-DD hh:mm:ss }
+{ Topic: `` Data: '' Timestamp(UTC-0): 2025-1-29 0:53:9 YYYY-MM-DD hh:mm:ss }
+{ Topic: "" Data: () Timestamp(UTC-0): 2025-1-29 0:53:36 YYYY-MM-DD hh:mm:ss }
+{ Topic: {topic,data} Data: {topic:"it's a",data:"trap"} Timestamp(UTC-0): 2025-1-29 0:54:49 YYYY-MM-DD hh:mm:ss }

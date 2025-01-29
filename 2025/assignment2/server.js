@@ -42,7 +42,7 @@ app.post('/postmessage', (req,res) => {
     var curr_sec = date.getSeconds();
     var formatted_date = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec + " YYYY-MM-DD hh:mm:ss"
     
-    fs.writeFile('Data/posts.txt', '{ Topic: '+ topic +' Data: '+ data + ' Timestamp(UTC-0): ' + formatted_date + ' }\n', { flag: 'a+' }, err => {
+    fs.writeFile('Data/posts.txt', '{ Topic: '+ topic +' Data: '+ data + ' Timestamp (UTC-0): ' + formatted_date + ' }\n', { flag: 'a+' }, err => {
         if (err) 
             {
                 console.error('Error writing file', err);
