@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            svg {
+                display: block;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Box Plot from CSV Data</h2>
+        <div class="v1">
+            <p>Box plot for columns A, B, C, and D from a CSV file.</p>
+            <script>
+                // Create an SVG element
+                let boxplot = d3.select("div.v1").append("svg")
+                    .attr("width", 600)
+                    .attr("height", 300);
+
+                // Load CSV file
+                d3.csv("data.csv").then(function(data) {
+                    console.log("Raw CSV Data:", data);
+
+                    // Extract data from columns A, B, C, D
+                    let labels = ["A", "B", "C", "D"];
+                    let columns = labels.map(label => data.map(d => +d[label])); // Convert strings to numbers
+
+                    console.log("Parsed Data:", columns);
+
+                    // Define scales
+                    let y = d3.scaleLinear()
+                        .domain([0, d3.max(columns.flat())]) // Find max value across all data
+                        .range([200, 0]);
+
+                    let x = d3.scalePoint()
+                        .domain(labels)
+                        .range([0, 250]);
+
+                    // Add Y-axis
+                    boxplot.append("g")
+                        .attr("transform", "translate(50, 20)")
+                        .call(d3.axisLeft(y));
+
+                    // Add X-axis
+                    boxplot.append("g")
+                        .attr("transform", "translate(70, 230)")
+                        .call(d3.axisBottom(x));
+
+                    // Draw box plots for each column
+                    columns.forEach((dataset, i) => {
+                        dataset.sort(d3.ascending);
+                        
+                        let q1 = d3.quantile(dataset, 0.25);
+                        let q2 = d3.quantile(dataset, 0.5);
+                        let q3 = d3.quantile(dataset, 0.75);
+                        let min = d3.min(dataset);
+                        let max = d3.max(dataset);
+
+                        let xPos = x(labels[i]) + 70; // Positioning on x-axis
+
+                        // Draw vertical line (whiskers)
+                        boxplot.append("line")
+                            .attr("x1", xPos)
+                            .attr("y1", y(min))
+                            .attr("x2", xPos)
+                            .attr("y2", y(max))
+                            .attr("stroke", "black");
+
+                        // Draw box
+                        boxplot.append("rect")
+                            .attr("x", xPos - 20)
+                            .attr("y", y(q3))
+                            .attr("width", 40)
+                            .attr("height", y(q1) - y(q3))
+                            .attr("stroke", "black")
+                            .attr("fill", "red");
+
+                        // Draw median line
+                        boxplot.append("line")
+                            .attr("x1", xPos - 20)
+                            .attr("y1", y(q2))
+                            .attr("x2", xPos + 20)
+                            .attr("y2", y(q2))
+                            .attr("stroke", "black");
+                    });
+                }).catch(error => console.error("Error loading CSV:", error));
+            </script>
+        </div>
+    </body>
+</html>
