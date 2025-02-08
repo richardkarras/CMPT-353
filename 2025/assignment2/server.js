@@ -40,7 +40,7 @@ app.post('/postmessage', (req,res) => {
     var curr_hour = date.getHours();
     var curr_min = date.getMinutes();
     var curr_sec = date.getSeconds();
-    var formatted_date = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec + " YYYY-MM-DD hh:mm:ss"
+    var formatted_date = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec + " YYYY-MM-DD hh:mm:ss";
     
     fs.writeFile('Data/posts.txt', '{ Topic: '+ topic +' Data: '+ data + ' Timestamp (UTC-0): ' + formatted_date + ' }\n', { flag: 'a+' }, err => {
         if (err) 
