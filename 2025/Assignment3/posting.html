@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posting using jQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        function getPosts() {
+            $.ajax({
+                url: "/messages",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                let postMessages = data.postMessages.sort((a, b) => b.id - a.id);
+                let replyMessages = data.replyMessages.sort((a, b) => b.id - a.id);
+
+                postMessages.forEach(post => {
+                    post.replies = replyMessages.filter(reply => reply.relatedPost === post.id);
+                });
+
+                const formattedPosts = postMessages.map(post => {
+                    return `<div id='post-${post.id}' style='border: 1px solid black; padding: 10px; margin: 10px;'>
+                        <strong style='font-size: larger;'>Topic:</strong> ${post.topic}<br><br>
+                        <span style='font-size: medium;'>${post.data}</span><br><br>
+                        <span style='font-size: smaller;'>Timestamp: ${post.date}</span><br>
+                        <div>
+                            Send a reply <br>
+                            <form class="reply-form" data-post-id="${post.id}">
+                            <textarea class="reply-data" required></textarea><br>
+                            <button id="response" class="submit">Add a response</button><br><br>
+                            </form>
+                                <div class="replies">
+                                    <strong style='font-size: larger'>Replies:</strong>
+                                    ${post.replies.map(reply => `
+                                        <div id='reply-${reply.id}' style='border-top: 1px solid gray; margin-top: 5px; padding-top: 5px;'>
+                                            <span style='font-size: medium;'>${reply.data}</span><br>
+                                            <span style='font-size: smaller;'>Timestamp: ${reply.date}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                $('#posts').html(formattedPosts);
+                }
+            });
+            }
+
+            getPosts();
+            $(document).ready(function() {
+                getPosts();
+            $('#posting button[type="submit"]').click(function(event) {
+            event.preventDefault();
+            const topic = $('#topic').val();
+            const data = $('#data').val();
+
+            $.ajax({
+                url: "/postmessage",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ topic: topic, data: data }),
+                success: function(response) {
+                //alert('Post submitted successfully!');
+                getPosts(); // Refresh the posts
+                },
+                error: function(error) {
+                //alert('Error submitting post.');
+                }
+            });
+            });
+
+            $(document).on('submit', '.reply-form', function(event) {
+            event.preventDefault();
+            const postId = $(this).data('post-id');
+            const replyData = $(this).find('.reply-data').val();
+
+            $.ajax({
+                url: "/postresponse",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ relatedPost: postId, data: replyData }),
+                success: function(response) {
+                //alert('Reply submitted successfully!');
+                getPosts(); // Refresh the posts
+                },
+                error: function(error) {
+                //alert('Error submitting reply.');
+                }
+            });
+            });
+        });
+        $('#posting button[type="submit"]').click(function(event) {
+            event.preventDefault();
+            const topic = $('#topic').val();
+            const data = $('#data').val();
+
+            $.ajax({
+            url: "/postmessage",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ topic: topic, data: data }),
+            success: function(response) {
+            //alert('Post submitted successfully!');
+            getPosts(); // Refresh the posts
+            },
+            error: function(error) {
+            //alert('Error submitting post.');
+            }
+            });
+        });
+        $(document).on('click', '.add-response-btn', function() {
+            $(this).siblings('.reply-form').toggle();
+        });
+
+        $(document).on('submit', '.reply-form', function(event) {
+            event.preventDefault();
+            const postId = $(this).data('post-id');
+            const replyData = $(this).find('.reply-data').val();
+
+            $.ajax({
+            url: "/postresponse",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ mId: postId, data: replyData }),
+            success: function(response) {
+                //alert('Reply submitted successfully!');
+                getPosts(); // Refresh the posts
+            },
+            error: function(error) {
+                //alert('Error submitting reply.');
+            }
+            });
+        });
+
+    </script>
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <script src="external/jquery/jquery.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <style>
+        body{
+            font-family: lato;
+            margin: 50px;
+            background-color: darkgrey;
+        }
+        #post-dialog{
+            padding: .4em 1em .4em 20px;
+            text-decoration: none;
+            position: relative;
+        }
+        #dialog-link{
+            padding: .4em 1em .4em 20px;
+            text-decoration: none;
+            position: relative;
+        }
+        .fakewindowcontain .ui-widget-overlay{
+            position: absolute;
+        }
+        button{
+            background-color: darkgreen;
+            color: white;
+            padding: .4em 1em;
+            display: inline-block;
+            position: relative;
+            line-height: normal;
+            margin-right: .1em;
+            cursor: pointer;
+            vertical-align: middle;
+            text-align: center;
+            -webkit-user-select: none;
+            user-select: none;
+            border-radius: 12px;
+        }
+        .ui-widget button{
+            font-family: Segoe UI,Helvetica,Arial,sans-serif;
+            font-size: 1em;
+        }
+        #post-dialog{
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            background-color:rgba(0,0,0,0.4);
+        }
+        .ui-dialog .ui-dialog-titlebar{
+            padding: .4em 1em;
+            background-color: green;
+        }
+        .ui-dialog .ui-dialog-titlebar-close{
+            float: right;
+            padding: 1px;
+            height: 24px;
+        }
+        .ui-dialog .ui-dialog-content{
+            position: relative;
+            border: 0;
+            padding: .5em 1em;
+            background: none;
+            overflow: auto;
+        }
+        .ui-dialog .ui-dialog-buttonpane{
+            text-align: left;
+            border-width: 1px 0 0 0;
+            background-image: none;
+            margin-top: .5em;
+            padding: .3em 1em .5em .4em;
+        }
+        .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
+            float: right;
+        }
+        .ui-dialog .ui-dialog-buttonpane button{
+            margin: .5em .4em .5em 0;
+            cursor: pointer;
+        }
+        .ui-dialog .ui-resizable-n{
+            height: 2px;
+            top: 0;
+        }
+        .ui-dialog .ui-resizable-e{
+            height: 2px;
+            right: 0;
+        }
+        .ui-dialog .ui-resizable-s{
+            height: 2px;
+            bottom: 0;
+        }
+        .ui-dialog .ui-resizable-w{
+            height: 2px;
+            left: 0;
+        }
+        .ui-dialog .ui-resizable-se,
+        .ui-dialog .ui-resizable-sw,
+        .ui-dialog .ui-resizable-ne,
+        .ui-dialog .ui-resizable-nw{
+	        width: 7px;
+	        height: 7px;
+        }
+        .ui-dialog .ui-resizable-se{
+	        right: 0;
+	        bottom: 0;
+        }
+        .ui-dialog .ui-resizable-sw{
+	        left: 0;
+	        bottom: 0;
+        }
+        .ui-dialog .ui-resizable-ne{
+        	right: 0;
+	        top: 0;
+        }
+        .ui-dialog .ui-resizable-nw{
+	        left: 0;
+	        top: 0;
+        }
+        .ui-draggable .ui-dialog-titlebar{
+            cursor: move;
+        }
+        input[type="text"]#topic {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        textarea#data {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <button id="opener" class="ui-button ui-corner-all ui-widget">Create new post</button>
+    <div id="post-dialog" title="New Post" class="ui-dialog">
+        <form id="posting">
+            <label for="topic">Topic:</label>
+            <input type="text" id="topic" name="topic" required><br>
+            <label for="data">Data:</label>
+            <textarea id="data" name="data" required></textarea><br>
+            <button id="posting" type="submit" class="ui-button ui-corner-all ui-widget">New Post</button>
+        </form>
+    </div>
+    <script>
+        $("#post-dialog").dialog({autoOpen: false});
+        $("#opener").click(function(){$("#post-dialog").dialog("open");});
+    </script>
+    <div id="posts">
+    </div>
+</body>
+</html>

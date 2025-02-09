@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true}));
 
 app.get('/', (req, res, next) => {
-    res.sendFile('/Server/posting.html');
+    res.sendFile('posting.html');
 })
 
 app.get('/readPosts', (req,res) => {

@@ -1,21 +1,22 @@
 'use strict';
 
 //load package
+const path = require("path");
 const bodyParser = require("body-parser");
 const express = require("express");
-
-app.use(express.json());
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.urlencoded({extended: true}));
 
 //server variables
 const PORT = 8080;
 const HOST = '0.0.0.0';
 const app = express();
 
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.urlencoded({extended: true}));
+
 //Message and reply arrays
-var postMessages = [];
-var replyMessages = [];
+const postMessages = [];
+const replyMessages = [];
 var messageId = 0;
 
 /*Function to create timestamp
@@ -30,18 +31,18 @@ function timeStamp() {
     let curr_hour = date.getHours();
     let curr_min = date.getMinutes();
     let curr_sec = date.getSeconds();
-    return curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec + " Z";
+    return `${curr_year}-${curr_month}-${curr_date} ${curr_hour}:${curr_min}:${curr_sec}`;
 }
 
 //Root page set to posting.html
 app.get('/', (req,res,next) => {
-    res.sendFile('posting.html');
+    res.sendFile(path.join(__dirname, 'posting.html'));
 });
 
 //Request to send all Posts and Replies
-app.get('/alldata', (req,res) => {
-    res.type('text').send(postMessages,replyMessages);
-})
+app.get('/messages', (req, res) => {
+    res.json({ postMessages, replyMessages });
+});
 
 /*Create a new post, requires "topic" and "data"
 //topic = text titling for the post
@@ -52,7 +53,6 @@ app.get('/alldata', (req,res) => {
 app.post('/postmessage', (req, res) => {
     try {
         const { topic, data } = req.body;
-
         //check for required data
         if (!topic) {
             throw new Error('Topic is required');
@@ -90,7 +90,7 @@ app.post('/postmessage', (req, res) => {
 */
 app.post('/postresponse', (req,res) => {
     try {
-        const {mId,data} = req.body;    
+        const {mId,data} = req.body;
         //validating mId is a post and that data isn't empty
         if (!postMessages.some(msg => msg.id === mId)){
             throw new Error("Can't find that post");

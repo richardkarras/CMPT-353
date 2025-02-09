@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posting using jQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script type="text/javascript">
+        $(function() {
+            $("#accordion").accordion({ collapsible: true, active: true, heightStyle: "content" });
+        });
+
+        function getPosts() {
+            $.ajax({
+                url: "/messages",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    let postMessages = data.postMessages.sort((a, b) => b.id - a.id);
+                    let replyMessages = data.replyMessages.sort((a, b) => b.id - a.id);
+
+                    postMessages.forEach(post => {
+                        post.replies = replyMessages.filter(reply => reply.relatedPost === post.id);
+                    });
+
+                    const formattedPosts = postMessages.map(post => {
+                        return `<h1><strong>Topic:</strong> ${post.topic}</h1>
+                                <div>
+                                    <span>${post.data}</span><br><br>
+                                    <span>Timestamp: ${post.date}</span>
+                                    <span>Post id: ${post.id}</span>
+                                    <div>
+                                        <form class="reply-form" data-post-id="${post.id}">
+                                            <textarea class="reply-data" required></textarea><br>
+                                            <button type="submit" class="response">Add a response</button>
+                                        </form>
+                                        <div class="replies">
+                                            ${post.replies.map(reply => `
+                                            <div id='reply-${reply.id}' style='border-top: 1px solid gray; margin-top: 5px; padding-top: 5px;'>
+                                                <span>${reply.data}</span><br>
+                                                <span>Timestamp: ${reply.date}</span>
+                                            </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>`;
+                    }).join('');
+
+                    $('#accordion').html(formattedPosts).accordion("refresh");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            getPosts();
+
+            $('#posting button[type="submit"]').click(function(event) {
+                event.preventDefault();
+                const topic = $('#topic').val();
+                const data = $('#data').val();
+
+                $.ajax({
+                    url: "/postmessage",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ topic: topic, data: data }),
+                    success: function(response) {
+                        getPosts(); // Refresh the posts
+                        alert("Sent "+ topic + data);
+                    },
+                    error: function(error) {
+                        // Handle error
+                    }
+                });
+            });
+
+            $(document).on('click', '.reply-form button[type="submit"]', function(event) {
+                event.preventDefault();
+                const postId = $(this).closest('form').data('postId').val;
+                const replyData = $(this).closest('form').find('.reply-data').val();
+            
+                $.ajax({
+                    url: "/postresponse",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ relatedPost: postId, data: replyData }),
+                    success: function(response) {
+                        alert("Sent response to post ID: " + postId);
+                        getPosts(); // Refresh the posts
+                    },
+                    error: function(error) {
+                        // Handle error
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <button id="opener">Create new post</button>
+    <div id="post-dialog" title="New Post">
+        <form id="posting">
+            <label for="topic">Topic:</label>
+            <input type="text" id="topic" name="topic" required><br>
+            <label for="data">Data:</label>
+            <textarea id="data" name="data" required></textarea><br>
+            <button type="submit">New Post</button>
+        </form>
+    </div>
+</body>
+</html>
