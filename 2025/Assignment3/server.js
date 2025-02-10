@@ -120,4 +120,6 @@ app.post('/postresponse', (req,res) => {
 });
 
 app.listen(PORT,HOST);
-console.log('Assignment 3 Server up and running, CTRL+C to shutdown');
+console.log('Assignment 3 Server up and running!');
+console.log('HOST IP: ',HOST);
+console.log('Listening on port: ',PORT);

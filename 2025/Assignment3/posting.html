@@ -34,7 +34,7 @@
                                 <div class="replies">
                                     <strong style='font-size: larger'>Replies:</strong>
                                     ${post.replies.map(reply => `
-                                        <div id='reply-${reply.id}' style='border-top: 1px solid gray; margin-top: 5px; padding-top: 5px;'>
+                                        <div id='reply-${reply.id}' style='border-top: 1px solid green; margin-top: 5px; padding-top: 5px;'>
                                             <span style='font-size: medium;'>${reply.data}</span><br>
                                             <span style='font-size: smaller;'>Timestamp: ${reply.date}</span>
                                         </div>
@@ -149,6 +149,12 @@
             padding: .4em 1em .4em 20px;
             text-decoration: none;
             position: relative;
+            z-index:1000;
+            left: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            background-color:rgba(0,0,0,0.4);
         }
         #dialog-link{
             padding: .4em 1em .4em 20px;
@@ -176,14 +182,6 @@
         .ui-widget button{
             font-family: Segoe UI,Helvetica,Arial,sans-serif;
             font-size: 1em;
-        }
-        #post-dialog{
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: auto;
-            height: auto;
-            background-color:rgba(0,0,0,0.4);
         }
         .ui-dialog .ui-dialog-titlebar{
             padding: .4em 1em;
@@ -272,6 +270,10 @@
             box-sizing: border-box;
             border: 2px solid #ccc;
             border-radius: 8px;
+        }
+        #opener {
+            display: block;
+            margin: 20px auto;
         }
     </style>
 </head>
