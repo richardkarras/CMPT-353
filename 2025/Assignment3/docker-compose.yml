@@ -1,7 +1,9 @@
 services:
   a3:
     image: node:latest
-    build: .
+    build:
+      dockerfile: dockerfile
+      context: .
     container_name: a3node
     ports:
     - 3000:8080
