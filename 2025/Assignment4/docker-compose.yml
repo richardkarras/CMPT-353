@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  frontend:
+    build: 
+      dockerfile: dockerfile
+      context: .
+    container_name: a4js
+    ports: 
+      - '80:3000'
+    volumes:
+      - D:/CMPT-353/2025/Assignment4:/server #Enforcer
+    working_dir: /server
+    environment:
+      DB_HOST: db4
+      DB_PORT: 3306
+      DB_DATABASE: postdb
+      DB_USER: root
+      DB_PASSWORD: nimad54321
+    depends_on:
+      mysql:
+        condition: service_started
+    stdin_open: true
+    tty: true
+    #command: nodemon "/server/server.js"
+  mysql:
+    image: mysql
+    restart: always
+    container_name: db4
+    volumes:
+      - D:/CMPT-353/2025/Assignment4/db:/var/lib/mysql #Enforcer
+    environment:
+      # MYSQL_DATABASE: postdb
+      # MYSQL_USER: admin
+      # MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: nimad54321
+      

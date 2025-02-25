@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Topic & Data </title>
+    
+  </head>
+  <body>
+    <form action="/posting" method="post">
+      <label for="Topic"> Topic:</label><br><br>
+      <input type="text" name="topic" value=""><br><br>
+      <br>
+      <label for="Data"> Data:</label><br><br>
+      <input type="text" name="data" value=""><br><br>
+      <br>
+      <input type="submit" value="Submit"><br><br>
+    </form>
+    <button onclick="getPosts()"> Read Posts </button>
+    <script type = "text/javascript">
+      function getPosts()
+      {
+        fetch("/getPosts")
+        .then(response => response.text())
+        .then(data => {document.getElementById("posts").innerHTML = data;})
+        .catch(error => console.error(error));
+      }
+    </script>  
+    <div id="posts"></div>
+
+    <script type="text/javascript">
+      const form = document.querySelector("form");
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const topic = formData.get("topic");
+        const data = formData.get("data");
+
+        fetch("/addPost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ topic, data })
+        })
+        .then(response => response.json())
+        .then(result => console.log(result))
+        .catch(error => console.error(error));
+      });
+    </script>
+  </body>
+</html>

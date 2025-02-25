@@ -1,0 +1,15 @@
+services:
+  a3:
+    image: node:latest
+    build:
+      dockerfile: dockerfile
+      context: .
+    container_name: a3node
+    ports:
+    - 3000:8080
+    volumes:
+    - D:/CMPT-353/2025/Assignment3:/Server #Enforcer
+    working_dir: /Server
+    command: "node server.js"
+    stdin_open: true
+    tty: true
