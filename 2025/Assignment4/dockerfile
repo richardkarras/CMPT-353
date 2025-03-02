@@ -1,6 +1,6 @@
 FROM node:latest
 
-EXPOSE 8080
+EXPOSE 3000
 
 WORKDIR /usr/src/app
 
@@ -9,7 +9,7 @@ COPY ./package*.json /usr/src/app
 #RUN npm init
 RUN npm install
 RUN npm install express
-RUN npm install mysql
-RUN npm install react
+RUN npm install mysql2
+#RUN npm install react
 
 CMD ["/bin/bash"]
