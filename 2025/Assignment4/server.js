@@ -18,27 +18,62 @@ const connection = mysql.createConnection({
   password: "nimad54321"
 });
 
+/*Initializes database, selects database and creates posts and reply tables.
+//DB: postdb
+//Tables: posts, reply
+*/
 function InitDB(){
+  initPostDB();
+  UsePostDB();
+  initPostsTB();
+  initReplyTB();
+}
+
+// Initializes postdb
+function initPostDB(){
   let createPostDB = "CREATE DATABASE postdb";
   connection.query(createPostDB, (err, result) => {
     if (err) throw err;
     console.log(result);
-    console.log("Database postdb created.");
+  console.log("Database postdb created.");
   UsePostDB();
-  let createPostsTable = "CREATE TABLE posts(id int AUTO_INCREMENT NOT NULL, timeStamp datetime default CURRENT_TIMESTAMP, topic VARCHAR(255) NOT NULL, data VARCHAR(2550) NOT NULL, PRIMARY KEY (id))";
-        connection.query(createPostsTable, (err, result) => {
-          if (err) throw err;
-          console.log(result);
-          console.log("Table posts created.");
-        });
-        let createReplyTable = "CREATE TABLE reply(id int AUTO_INCREMENT NOT NULL, timeStamp datetime default CURRENT_TIMESTAMP, data VARCHAR(2550) NOT NULL, postId INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (postId) REFERENCES posts(id))";
-        connection.query(createReplyTable, (err, result) => {
-          if (err) throw err;
-          console.log(result);
-          console.log("Table Reply created.");
-        });
-  });
+  })
 }
+
+/*Initilizes table: posts
+//posts:
+//  id INT AUTO_INCREMENT NOT NULL
+//  timeStamp DATETIME DEFAULT CURRENT_TIMESTAMP
+//  topic VARCHAR(255) NOT NULL
+//  data VARCHAR(2550) NOT NULL
+//  PRIMARY KEY (id)
+*/
+function initPostsTB(){
+  let createPostsTable = "CREATE TABLE posts(id INT AUTO_INCREMENT NOT NULL, timeStamp DATETIME DEFAULT CURRENT_TIMESTAMP, topic VARCHAR(255) NOT NULL, data VARCHAR(2550) NOT NULL, PRIMARY KEY (id))";
+    connection.query(createPostsTable, (err, result) => {
+      if (err) throw err;
+        console.log(result);
+      console.log("Table posts created.");
+    });
+}
+
+/*Initilizes table: reply
+//reply:
+//  id int AUTO_INCREMENT NOT NULL
+//  timeStamp DATETIME DEFAULT CURRENT_TIMESTAMP
+//  data VARCHAR(2550) NOT NULL
+//  postId INT NOT NULL
+//  PRIMARY KEY (id)
+//  FOREIGN KEY (postId) REFERENCES posts(id)
+*/
+function initReplyTB(){
+  let createReplyTable = "CREATE TABLE reply(id INT AUTO_INCREMENT NOT NULL, timeStamp DATETIME DEFAULT CURRENT_TIMESTAMP, data VARCHAR(2550) NOT NULL, postId INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (postId) REFERENCES posts(id))";
+  connection.query(createReplyTable, (err, result) => {
+    if (err) throw err;
+      console.log(result);
+    console.log("Table Reply created.");
+  });
+}  
 
 //For consistent access to postdb 
 function UsePostDB(){
@@ -64,25 +99,54 @@ function timeStamp() {
   return `${curr_year}-${curr_month}-${curr_date} ${curr_hour}:${curr_min}:${curr_sec}`;
 }
 
-try{
-  let checkDBSql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'postdb'";
+/*  init()
+// Checks for database: postdb, table: posts and table: reply for creation
+// Calls initPostDB() if postdb is not found
+// Calls initPostsTB() if tables is not found
+// Calls initReplyTB() if reply is not found
+*/
+function init(res) {
+  try {
+    let checkDBSql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'postdb'";
     connection.query(checkDBSql, (err, dbResult) => {
       if (err) throw err;
       console.log(dbResult);
-    
+
       if (dbResult.length > 0) {
-        let checkTableSql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'postdb' AND TABLE_NAME = 'posts'";
-        connection.query(checkTableSql, (err, tableResult) => {
-        if (err) throw err;
-        console.log(tableResult);})
+        UsePostDB();
+        let checkPostSql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'postdb' AND TABLE_NAME = 'posts'";
+        connection.query(checkPostSql, (err, postResult) => {
+          if (err) throw err;
+          console.log(postResult);
+
+          if (postResult.length > 0) {
+            let checkReplySql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'postdb' AND TABLE_NAME = 'reply'";
+            connection.query(checkReplySql, (err, replyResult) => {
+              if (err) throw err;
+              console.log(replyResult);
+
+              if (replyResult.length > 0) {
+                res.json({ success: true, message: "Database and tables found." });
+              } else {
+                initReplyTB();
+                res.json({ success: true, message: "Reply table initialized." });
+              }
+            });
+          } else {
+            initPostsTB();
+            initReplyTB();
+            res.json({ success: true, message: "Posts and reply tables initialized." });
+          }
+        });
       } else {
         InitDB();
+        res.json({ success: true, message: "Database initialized." });
       }
-    console.log("Databse postdb found.");
-});} catch {
-  InitDB();
-  UsePostDB();
-  console.log("initdb && usepostdb");
+    });
+  } catch (error) {
+    console.error("Error initializing database:", error);
+    res.json({ success: false, message: "Error initializing database." });
+  }
 }
 
 app.get('/', (req,res,next) => {
@@ -90,26 +154,7 @@ app.get('/', (req,res,next) => {
 });
 
 app.get("/init", (req, res) => {
-  try{
-    let checkDBSql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'postdb'";
-    connection.query(checkDBSql, (err, dbResult) => {
-      if (err) throw err;
-      console.log(dbResult);
-      
-      if (dbResult.length > 0) {
-        let checkTableSql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE   TABLE_SCHEMA = 'postdb' AND TABLE_NAME = 'posts'";
-        connection.query(checkTableSql, (err, tableResult) => {
-        if (err) throw err;
-        console.log(tableResult);})
-      } else {
-        InitDB();
-      }
-      console.log("Databse postdb found.");
-  });} catch {
-    InitDB();
-    UsePostDB();
-    console.log("initdb && usepostdb");
-  }
+  init(res);
 });
 
 app.get('/lastupdate',(req,res) => {
@@ -125,6 +170,15 @@ app.post("/postmessage", function(req, res) {
   UsePostDB();
   const topic = req.body.topic;
   const data = req.body.data;
+  if (!topic && !data) {
+    return res.status(400).json({ error: "Topic and Data are empty" });
+  }
+  if (!topic) {
+    return res.status(400).json({ error: "Missing topic" });
+  }
+  if (!data) {
+    return res.status(400).json({ error: "Missing data" });
+  }
 
   const sql = "INSERT INTO posts (topic, data) VALUES (?, ?)";
   connection.query(sql, [topic, data], function(err, result) {
@@ -147,7 +201,16 @@ app.post("/postresponse", function(req, res) {
   UsePostDB();
   const postId = req.body.postId;
   const data = req.body.data;
-
+  if (!postId && !data){
+    return res.status(400).json({ error: "PostId and Data are empty" });
+  }
+  if (!postId) {
+    return res.status(400).json({ error: "Missing associated postId" });
+  }
+  if (!data) {
+    return res.status(400).json({ error: "Missing reply data" });
+  }
+  
   const sql = "INSERT INTO reply (postId, data) VALUES (?,?)";
   connection.query(sql, [postId, data], function(err, result) {
     if (err) {

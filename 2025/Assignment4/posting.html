@@ -62,7 +62,7 @@
                 success: function(data) {
                     //If the timestamps differ refresh getPosts
                     if (data.timestamp > lastUpdateTimestamp) {
-                        console.log('New update detected!');
+                        console.log('New update from:' + data.timestamp + 'current timestamp:' + Date.now());
                         lastUpdateTimestamp = data.timestamp;
                         getPosts();
                     }
@@ -75,7 +75,7 @@
               //Set interval for checkForUpdates()
               setInterval(checkForUpdates, 100); // Check for updates every 150ms
 
-              $('#posting button[type="submit"]').click(function(event) {
+              $(document).on('submit', '.posting', function(event) {
                   event.preventDefault();
                   const topic = $('#topic').val();
                   const data = $('#data').val();
@@ -88,10 +88,11 @@
                       success: function(response) {
                           //Update the last update time stamp
                           lastUpdateTimestamp = Date.now();
+                          console.log(lastUpdateTimestamp);
                           getPosts(); // Refresh the posts
                       },
                       error: function(error) {
-                          // Handle error
+                          alert(error.responseText);
                       }
                   });
               });
@@ -109,9 +110,11 @@
                       success: function(response) {
                         //Update the last update time stamp
                         lastUpdateTimestamp = Date.now();
+                        console.log(lastUpdateTimestamp);
                         getPosts(); // Refresh the posts
                       },
                       error: function(error) {
+                          alert(error.responseText);
                           // Handle error
                       }
                   });
