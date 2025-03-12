@@ -1,8 +1,9 @@
 services:
-  node1:
-    image: a2node
-    build: .
-    container_name: node1
+  a2node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: a2node
     ports:
     - 3000:8080
     volumes:
