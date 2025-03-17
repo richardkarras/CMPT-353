@@ -1,4 +1,5 @@
 import './App.css';
+<<<<<<< HEAD
 import { Routes,Route } from 'react-router';
 import { useState,useEffect } from 'react';
 import AddPosts from './Pages/AddPosts';
@@ -18,8 +19,25 @@ function App() {
           <Route path='/showpost/:postId' element={<ShowPost />}/>
         </Routes>
       </BrowserRouter>
+=======
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <p>
+          Things go here
+
+          <br></br>And this too?
+        </p>
+      </header>
+>>>>>>> origin/main
     </div>
   );
 }
 
+<<<<<<< HEAD
 export default App;
+=======
+export default App;
+>>>>>>> origin/main

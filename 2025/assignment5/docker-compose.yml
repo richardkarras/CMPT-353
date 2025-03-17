@@ -1,7 +1,13 @@
 services:
+<<<<<<< HEAD
  a5cdb1:
   image: couchdb:3.4.2
   container_name: a5cdb1
+=======
+ couchdb:
+  image: couchdb:3.4.2
+  container_name: couchdb1
+>>>>>>> origin/main
   restart: unless-stopped
   environment:
     - COUCHDB_USER=admin
@@ -10,6 +16,7 @@ services:
     - "5984:5984"
   volumes:
     - ./couchdb:/opt/couchdb/data
+<<<<<<< HEAD
  a5n1:
   image: node:latest
   container_name: a5n1
@@ -26,5 +33,20 @@ services:
   volumes:
     - ./app:/usr/src/app
   working_dir: /usr/src/app
+=======
+ node1:
+  image: node:latest
+  container_name: node1
+  depends_on:
+    - couchdb
+  ports:
+    - "80:8080"
+  command: ["bin/bash"]  
+  environment:
+    - COUCHDB_URL=http://admin:password@couchdb:5984
+    - COUCHDB_DB=questionsdb
+  volumes:
+    - ./app:/usr/src/app
+>>>>>>> origin/main
   stdin_open: true
   tty: true
