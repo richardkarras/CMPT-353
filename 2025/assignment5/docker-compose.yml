@@ -1,30 +1,43 @@
 services:
- a5cdb1:
-  image: couchdb:3.4.2
-  container_name: a5cdb1
-  restart: unless-stopped
-  environment:
-    - COUCHDB_USER=admin
-    - COUCHDB_PASSWORD=password
-  ports:
-    - "5984:5984"
-  volumes:
-    - ./couchdb:/opt/couchdb/data
- a5n1:
-  image: node:latest
-  container_name: a5n1
-  depends_on:
-    - a5cdb1
-  ports:
-    - "80:3000"
-  command: ["bin/bash"]  
-  environment:
-    - COUCHDB_URL=http://admin:password@a5cdb1:5984
-    - COUCHDB_DB=postdb
-    - COUCHDB_USER=admin
-    - COUCHDB_PASSWORD=password
-  volumes:
-    - ./app:/usr/src/app
-  working_dir: /usr/src/app
-  stdin_open: true
-  tty: true
+  a5couch:
+    image: couchdb:3.4.2
+    container_name: a5couch
+    restart: unless-stopped
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - "5984:5984"
+    volumes:
+      - ./couchdb:/opt/couchdb/data
+  a5node:
+    image: node:latest
+    container_name: a5node
+    depends_on:
+      - a5couch
+    ports:
+      - "81:81" 
+    environment:
+      - NODEPORT=81
+      - COUCHDB_URL=http://admin:password@a5couch:5984
+      - COUCHDB_DB=postdb
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    volumes:
+      - ./backend:/usr/src/app
+    working_dir: /usr/src/app
+    stdin_open: true
+    tty: true
+  a5react:
+    image: node:latest
+    container_name: a5react
+    depends_on:
+      - a5couch
+      - a5node
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+    working_dir: /usr/src/app
+    stdin_open: true
+    tty: true

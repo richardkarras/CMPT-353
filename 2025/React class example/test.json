@@ -1,0 +1,15 @@
+[ {
+    "_id":"3783db76671a96b99cd83d210e00020d",
+    "_rev":"1-05ab4e82069b962714c754aecb9f3119",
+    "type":"post",
+    "topic":"Test topic",
+    "data":"Test data",
+    "stamp":"2025-3-15 2:12:10"},
+{
+    "_id":"3783db76671a96b99cd83d210e003356",
+    "_rev":"1-ba3ed22a2e17a86dbabf4ff14d0f948a",
+    "type":"response",
+    "data":"Test data",
+    "stamp":"2025-3-15 2:14:44"},
+{
+    "_id":"3783db76671a96b99cd83d210e0048b9","_rev":"1-d077e6192a367b4c0b8d5b0d8a243f61","type":"response","parentId":"3783db76671a96b99cd83d210e00020d","data":"Test data","stamp":"2025-3-15 2:17:47"},{"_id":"68e3eec37e541c6f9c426fee9e000d0d","_rev":"1-2700990dc01787c7ecad13f388e749cd","type":"post","topic":"curl topic","data":"curl data","stamp":"2025-3-20 1:43:43"},{"_id":"68e3eec37e541c6f9c426fee9e000d95","_rev":"1-2e56862f4629bdcea4ccd18174bdcd96","type":"response","parentId":"68e3eec37e541c6f9c426fee9e000d0d","data":"curl data","stamp":"2025-3-20 1:46:25"},{"_id":"_design/all_posts","_rev":"1-862d6a4c50c3d513a9b4b200ff205251","views":{"post-view":{"map":"function (doc) {\n  emit(doc._id, {topic:doc.topic,data:doc.data,id:doc._id,type:doc.type,timestamp:doc.stamp});\n}"}},"language":"javascript"}]
